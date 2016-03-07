@@ -88,7 +88,7 @@ void loop () {
   // arc mode
   for (uint8_t i = 0; i < strip.numPixels(); i++) {
 
-    if (i <= secondval) {
+    if (tailBand( i, secondval, 15.0 )) {
       // calculates a faded arc from low to maximum brightness
       pixelColorBlue = (i + 1) * (255 / (secondval + 1));
       //pixelColorBlue = 255;
@@ -97,7 +97,7 @@ void loop () {
       pixelColorBlue = 0;
     }
 
-    if (i <= minuteval) {
+    if (deadBand( i, minuteval, 0.9 )) {
       pixelColorGreen = (i + 1) * (255 / (minuteval + 1));
       //pixelColorGreen = 255;
     }
@@ -105,7 +105,7 @@ void loop () {
       pixelColorGreen = 0;
     }
 
-    if (i <= hourval) {
+    if (deadBand( i, hourval, 2.5 )) {
       pixelColorRed = (i + 1) * (255 / (hourval + 1));
       //pixelColorRed = 255;
     }
@@ -118,7 +118,7 @@ void loop () {
 
   /*
   // for serial debugging
-  */
+  
    Serial.print(hourval, DEC);
    Serial.print(':');
    Serial.print(minuteval, DEC);
@@ -134,7 +134,36 @@ void loop () {
 
 }
 
+// Boolean test for clock hand width
+boolean deadBand( uint8_t countVal, byte actualVal, float deadBand ) {
+     if( ( countVal >  ( actualVal - deadBand) ) and ( countVal < ( actualVal + deadBand ) ) ) {
+       return true;
+     }
+     if( actualVal - deadBand < 0 ) {
+       if( ( countVal >  ( 60 + actualVal - deadBand) ) and ( countVal < actualVal ) ) {
+         return true;
+       }
+     }
+     if( actualVal + deadBand > 60 ) {
+       if( ( countVal >  ( actualVal - deadBand) ) and ( countVal < actualVal + deadBand - 60 ) ) {
+         return true;
+       }
+     }
+     return false;
+}
 
+// Boolean test for clock hand width
+boolean tailBand( uint8_t countVal, byte actualVal, float deadBand ) {
+     if( ( countVal >  ( actualVal - deadBand) ) and ( countVal < actualVal ) ) {
+       return true;
+     }
+     if( actualVal - deadBand < 0 ) {
+       if( countVal >  ( 60 + actualVal - deadBand) ) {
+         return true;
+       }
+     }
+     return false;
+}
 // Fill the dots one after the other with a color
 void colorWipe(uint32_t c, uint8_t wait) {
   for (uint16_t i = 0; i < strip.numPixels(); i++) {
