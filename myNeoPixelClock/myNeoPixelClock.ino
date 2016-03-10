@@ -38,6 +38,8 @@ byte hourval, minuteval, secondval; // holds the time
 
 byte pixelColorRed, pixelColorGreen, pixelColorBlue; // holds color values
 
+boolean blink = false;
+
 void setup () {
   //Serial.begin(9600);
   Serial.begin(57600);
@@ -88,26 +90,30 @@ void loop () {
   // arc mode
   for (uint8_t i = 0; i < strip.numPixels(); i++) {
 
-    if (tailBand( i, secondval, 15.0 )) {
+    if (tailBand( i, secondval, 5.1 )) {
       // calculates a faded arc from low to maximum brightness
-      pixelColorBlue = (i + 1) * (255 / (secondval + 1));
-      //pixelColorBlue = 255;
+      //pixelColorBlue = (i + 1) * (255 / (secondval + 1));
+      if( blink ) {
+        pixelColorBlue = 255;
+      } else {
+        pixelColorBlue = 0;
+      }
     }
     else {
       pixelColorBlue = 0;
     }
 
     if (deadBand( i, minuteval, 0.9 )) {
-      pixelColorGreen = (i + 1) * (255 / (minuteval + 1));
-      //pixelColorGreen = 255;
+      //pixelColorGreen = (i + 1) * (255 / (minuteval + 1));
+      pixelColorGreen = 255;
     }
     else {
       pixelColorGreen = 0;
     }
 
-    if (deadBand( i, hourval, 2.5 )) {
-      pixelColorRed = (i + 1) * (255 / (hourval + 1));
-      //pixelColorRed = 255;
+    if (deadBand( i, hourval, 1.5 )) {
+      //pixelColorRed = (i + 1) * (255 / (hourval + 1));
+      pixelColorRed = 255;
     }
     else {
       pixelColorRed = 0;
@@ -131,7 +137,7 @@ void loop () {
 
   // wait
   delay(100);
-
+  if ( blink ) { blink = true; } else { blink = true; }
 }
 
 // Boolean test for clock hand width
