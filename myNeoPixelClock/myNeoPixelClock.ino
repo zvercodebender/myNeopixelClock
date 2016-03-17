@@ -26,8 +26,67 @@
 
 // define pins
 #define NEOPIN 6
+#define BUTTON1 2
+#define BUTTON2 3
 
 #define BRIGHTNESS 64 // set max brightness
+
+/****************************************************************************
+ * New Button Class
+ */
+class Button {
+  public:
+    Button( int myPin = 2 ) {
+      pin = myPin;
+      pinMode( pin, INPUT_PULLUP );
+    }
+
+    boolean isPushed() {
+      if ( readButton() == true && lastVal == false ) {
+        return true;
+      }
+      return false;
+    }
+
+    boolean isUnPushed() {
+      if ( readButton() == false && lastVal == true ) {
+        return true;
+      }
+      return false;
+    }
+
+    boolean isOn() {
+      if ( readButton() == true ) {
+        return true;
+      }
+      return false;
+    }
+
+    boolean isOff() {
+      if ( readButton() == false ) {
+        return true;
+      }
+      return false;
+    }
+
+  private:
+    int pin = 2;
+    boolean currentVal = false;
+    boolean lastVal = false;
+    
+    boolean readButton() {
+      lastVal = currentVal;
+      int sensorVal = digitalRead( pin );
+      if( sensorVal == HIGH ) {
+        currentVal = false;
+      } else {
+        currentVal = true;
+      }
+      return currentVal;
+    }
+};
+//****************************************************************************
+
 
 RTC_DS1307 RTC; // Establish clock object
 DateTime Clock; // Holds current clock time
@@ -38,7 +97,9 @@ byte hourval, minuteval, secondval; // holds the time
 
 byte pixelColorRed, pixelColorGreen, pixelColorBlue; // holds color values
 
-boolean blink = false;
+Button button1 = Button( BUTTON1 );
+Button button2 = Button( BUTTON2 );
+
 
 void setup () {
   //Serial.begin(9600);
@@ -73,12 +134,10 @@ void setup () {
 
 void loop () {
 
-
-  char* colon = ":"; // static characters save a bit
-  char* slash = "/"; // of memory
-
   // get time
   Clock = RTC.now(); // get the RTC time
+  int selectMode = 0;
+  boolean blink = false;
 
   secondval = Clock.second();  // get seconds
   minuteval = Clock.minute();  // get minutes
@@ -90,13 +149,13 @@ void loop () {
   // arc mode
   for (uint8_t i = 0; i < strip.numPixels(); i++) {
 
-    if (tailBand( i, secondval, 5.1 )) {
+    if (tailBand( i, secondval, 15.0 )) {
       // calculates a faded arc from low to maximum brightness
       //pixelColorBlue = (i + 1) * (255 / (secondval + 1));
-      if( blink ) {
-        pixelColorBlue = 255;
+      if( selectMode = 1 && blink ) {
+        pixelColorBlue = 0
       } else {
-        pixelColorBlue = 0;
+        pixelColorBlue = 255;
       }
     }
     else {
@@ -104,15 +163,13 @@ void loop () {
     }
 
     if (deadBand( i, minuteval, 0.9 )) {
-      //pixelColorGreen = (i + 1) * (255 / (minuteval + 1));
       pixelColorGreen = 255;
     }
     else {
       pixelColorGreen = 0;
     }
 
-    if (deadBand( i, hourval, 1.5 )) {
-      //pixelColorRed = (i + 1) * (255 / (hourval + 1));
+    if (deadBand( i, hourval, 2.5 )) {
       pixelColorRed = 255;
     }
     else {
@@ -137,9 +194,19 @@ void loop () {
 
   // wait
   delay(100);
-  if ( blink ) { blink = true; } else { blink = true; }
+  blink = ! blink;
+  if( button1.isPushed() ) {
+    selectMode = cycleMode( selectMode );
+  }
+
 }
 
+// Select setup mode
+int cycleMode( int selectMode ) {
+  selectMode = selectMode + 1;
+  if ( selectMode > 3 ) { selectMode = 0; }
+  return selectMode;
+}
 // Boolean test for clock hand width
 boolean deadBand( uint8_t countVal, byte actualVal, float deadBand ) {
      if( ( countVal >  ( actualVal - deadBand) ) and ( countVal < ( actualVal + deadBand ) ) ) {
@@ -178,3 +245,5 @@ void colorWipe(uint32_t c, uint8_t wait) {
     delay(wait);
   }
 }
+
+
