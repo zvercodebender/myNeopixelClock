@@ -154,8 +154,6 @@ void loop () {
   for (uint8_t i = 0; i < strip.numPixels(); i++) {
 
     if (tailBand( i, secondval, 15.0 )) {
-      // calculates a faded arc from low to maximum brightness
-      //pixelColorBlue = (i + 1) * (255 / (secondval + 1));
       if( selectMode = 1 && blink ) {
         pixelColorBlue = 0
       } else {
