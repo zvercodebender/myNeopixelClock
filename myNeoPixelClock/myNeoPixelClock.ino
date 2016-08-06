@@ -93,6 +93,7 @@ DateTime Clock; // Holds current clock time
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, NEOPIN, NEO_GRB + NEO_KHZ800); // strip object
 
+byte yearval, monthval, dayval;     // holds the date
 byte hourval, minuteval, secondval; // holds the time
 
 byte pixelColorRed, pixelColorGreen, pixelColorBlue; // holds color values
@@ -139,9 +140,12 @@ void loop () {
   int selectMode = 0;
   boolean blink = false;
 
+  yearval   = Clock.year();    // get year
+  monthval  = Clock.month();   // get month
+  dayval    = Clock.day();     // get day
   secondval = Clock.second();  // get seconds
   minuteval = Clock.minute();  // get minutes
-  hourval = Clock.hour();  	// get hours
+  hourval   = Clock.hour();    // get hours
   if (hourval > 11) hourval -= 12; // This clock is 12 hour, if 13-23, convert to 0-11
 
   hourval = (hourval * 60 + minuteval) / 12; //each red dot represent 24 minutes.
@@ -198,7 +202,20 @@ void loop () {
   if( button1.isPushed() ) {
     selectMode = cycleMode( selectMode );
   }
-
+  if( button2.isPushed() ) {
+     if( selectMode == 1 ) {
+        hourval   = Clock.hour() + 1;
+     }
+     if( selectMode == 2 ) {
+        minuteval   = Clock.minute() + 1;
+     }
+     if( selectMode == 3 ) {
+        secondval   = Clock.second() + 1;
+     }
+     rtc.adjust(DateTime( yearval, monthval, dayval, hourval, minuteval, secondval );
+     if (hourval > 11) hourval -= 12;           // This clock is 12 hour, if 13-23, convert to 0-11
+     hourval = (hourval * 60 + minuteval) / 12; //each red dot represent 24 minutes.
+  }
 }
 
 // Select setup mode
