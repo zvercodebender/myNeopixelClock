@@ -89,6 +89,11 @@ class Button {
     boolean readButton() {
       lastVal = currentVal;
       int sensorVal = digitalRead( pin );
+      //Serial.print("PIN Value ");
+      //Serial.print(sensorVal, DEC);
+      //Serial.print(" Pin Number ");
+      //Serial.print( pin, DEC);
+      //Serial.print("\n");
       if( sensorVal == HIGH ) {
         currentVal = false;
       } else {
