@@ -97,10 +97,13 @@ byte hourval, minuteval, secondval; // holds the time
 
 byte pixelColorRed, pixelColorGreen, pixelColorBlue; // holds color values
 
+<<<<<<< HEAD
 Button button1 = Button( BUTTON1 );
 Button button2 = Button( BUTTON2 );
 
 
+=======
+>>>>>>> parent of 436b84e... disable fade and add blink logic
 void setup () {
   //Serial.begin(9600);
   Serial.begin(57600);
@@ -151,26 +154,41 @@ void loop () {
 
     if (tailBand( i, secondval, 15.0 )) {
       // calculates a faded arc from low to maximum brightness
+<<<<<<< HEAD
       //pixelColorBlue = (i + 1) * (255 / (secondval + 1));
       if( selectMode = 1 && blink ) {
         pixelColorBlue = 0
       } else {
         pixelColorBlue = 255;
       }
+=======
+      pixelColorBlue = (i + 1) * (255 / (secondval + 1));
+      //pixelColorBlue = 255;
+>>>>>>> parent of 436b84e... disable fade and add blink logic
     }
     else {
       pixelColorBlue = 0;
     }
 
     if (deadBand( i, minuteval, 0.9 )) {
+<<<<<<< HEAD
       pixelColorGreen = 255;
+=======
+      pixelColorGreen = (i + 1) * (255 / (minuteval + 1));
+      //pixelColorGreen = 255;
+>>>>>>> parent of 436b84e... disable fade and add blink logic
     }
     else {
       pixelColorGreen = 0;
     }
 
     if (deadBand( i, hourval, 2.5 )) {
+<<<<<<< HEAD
       pixelColorRed = 255;
+=======
+      pixelColorRed = (i + 1) * (255 / (hourval + 1));
+      //pixelColorRed = 255;
+>>>>>>> parent of 436b84e... disable fade and add blink logic
     }
     else {
       pixelColorRed = 0;
@@ -194,10 +212,13 @@ void loop () {
 
   // wait
   delay(100);
+<<<<<<< HEAD
   blink = ! blink;
   if( button1.isPushed() ) {
     selectMode = cycleMode( selectMode );
   }
+=======
+>>>>>>> parent of 436b84e... disable fade and add blink logic
 
 }
 
