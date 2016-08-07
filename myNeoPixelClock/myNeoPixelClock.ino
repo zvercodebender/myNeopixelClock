@@ -26,8 +26,8 @@
 
 // define pins
 #define NEOPIN 6
-#define BUTTON1 2
-#define BUTTON2 3
+#define BUTTON1 10
+#define BUTTON2 11
 
 #define BRIGHTNESS 64 // set max brightness
 
@@ -39,6 +39,16 @@ class Button {
     Button( int myPin = 2 ) {
       pin = myPin;
       pinMode( pin, INPUT_PULLUP );
+    }
+
+    boolean togglePush() {
+      if ( readButton() == true && lastVal == false ) {
+        return true;
+      }
+      if ( readButton() == false && lastVal == true ) {
+        return false;
+      }
+      return false;
     }
 
     boolean isPushed() {
@@ -93,11 +103,17 @@ DateTime Clock; // Holds current clock time
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, NEOPIN, NEO_GRB + NEO_KHZ800); // strip object
 
+byte yearval, monthval, dayval;     // holds the date
 byte hourval, minuteval, secondval; // holds the time
 
 byte pixelColorRed, pixelColorGreen, pixelColorBlue; // holds color values
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+int selectMode = 0;
+
+>>>>>>> origin/master
 Button button1 = Button( BUTTON1 );
 Button button2 = Button( BUTTON2 );
 
@@ -139,12 +155,14 @@ void loop () {
 
   // get time
   Clock = RTC.now(); // get the RTC time
-  int selectMode = 0;
   boolean blink = false;
 
+  yearval   = Clock.year();    // get year
+  monthval  = Clock.month();   // get month
+  dayval    = Clock.day();     // get day
   secondval = Clock.second();  // get seconds
   minuteval = Clock.minute();  // get minutes
-  hourval = Clock.hour();  	// get hours
+  hourval   = Clock.hour();    // get hours
   if (hourval > 11) hourval -= 12; // This clock is 12 hour, if 13-23, convert to 0-11
 
   hourval = (hourval * 60 + minuteval) / 12; //each red dot represent 24 minutes.
@@ -153,9 +171,12 @@ void loop () {
   for (uint8_t i = 0; i < strip.numPixels(); i++) {
 
     if (tailBand( i, secondval, 15.0 )) {
+<<<<<<< HEAD
       // calculates a faded arc from low to maximum brightness
 <<<<<<< HEAD
       //pixelColorBlue = (i + 1) * (255 / (secondval + 1));
+=======
+>>>>>>> origin/master
       if( selectMode = 1 && blink ) {
         pixelColorBlue = 0
       } else {
@@ -214,12 +235,29 @@ void loop () {
   delay(100);
 <<<<<<< HEAD
   blink = ! blink;
-  if( button1.isPushed() ) {
+  if( button1.togglePush() ) {
     selectMode = cycleMode( selectMode );
   }
+<<<<<<< HEAD
 =======
 >>>>>>> parent of 436b84e... disable fade and add blink logic
 
+=======
+  if( button2.togglePush() ) {
+     if( selectMode == 1 ) {
+        hourval   = Clock.hour() + 1;
+     }
+     if( selectMode == 2 ) {
+        minuteval   = Clock.minute() + 1;
+     }
+     if( selectMode == 3 ) {
+        secondval   = Clock.second() + 1;
+     }
+     rtc.adjust(DateTime( yearval, monthval, dayval, hourval, minuteval, secondval );
+     if (hourval > 11) hourval -= 12;           // This clock is 12 hour, if 13-23, convert to 0-11
+     hourval = (hourval * 60 + minuteval) / 12; //each red dot represent 24 minutes.
+  }
+>>>>>>> origin/master
 }
 
 // Select setup mode
