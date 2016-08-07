@@ -26,8 +26,8 @@
 
 // define pins
 #define NEOPIN 6
-#define BUTTON1 2
-#define BUTTON2 3
+#define BUTTON1 10
+#define BUTTON2 11
 
 #define BRIGHTNESS 64 // set max brightness
 
@@ -39,6 +39,16 @@ class Button {
     Button( int myPin = 2 ) {
       pin = myPin;
       pinMode( pin, INPUT_PULLUP );
+    }
+
+    boolean togglePush() {
+      if ( readButton() == true && lastVal == false ) {
+        return true;
+      }
+      if ( readButton() == false && lastVal == true ) {
+        return false;
+      }
+      return false;
     }
 
     boolean isPushed() {
@@ -98,6 +108,8 @@ byte hourval, minuteval, secondval; // holds the time
 
 byte pixelColorRed, pixelColorGreen, pixelColorBlue; // holds color values
 
+int selectMode = 0;
+
 Button button1 = Button( BUTTON1 );
 Button button2 = Button( BUTTON2 );
 
@@ -137,7 +149,6 @@ void loop () {
 
   // get time
   Clock = RTC.now(); // get the RTC time
-  int selectMode = 0;
   boolean blink = false;
 
   yearval   = Clock.year();    // get year
@@ -197,10 +208,10 @@ void loop () {
   // wait
   delay(100);
   blink = ! blink;
-  if( button1.isPushed() ) {
+  if( button1.togglePush() ) {
     selectMode = cycleMode( selectMode );
   }
-  if( button2.isPushed() ) {
+  if( button2.togglePush() ) {
      if( selectMode == 1 ) {
         hourval   = Clock.hour() + 1;
      }
