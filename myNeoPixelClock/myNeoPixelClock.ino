@@ -108,12 +108,18 @@ byte hourval, minuteval, secondval; // holds the time
 
 byte pixelColorRed, pixelColorGreen, pixelColorBlue; // holds color values
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
 int selectMode = 0;
 
+>>>>>>> origin/master
 Button button1 = Button( BUTTON1 );
 Button button2 = Button( BUTTON2 );
 
 
+=======
+>>>>>>> parent of 436b84e... disable fade and add blink logic
 void setup () {
   //Serial.begin(9600);
   Serial.begin(57600);
@@ -165,25 +171,45 @@ void loop () {
   for (uint8_t i = 0; i < strip.numPixels(); i++) {
 
     if (tailBand( i, secondval, 15.0 )) {
+<<<<<<< HEAD
+      // calculates a faded arc from low to maximum brightness
+<<<<<<< HEAD
+      //pixelColorBlue = (i + 1) * (255 / (secondval + 1));
+=======
+>>>>>>> origin/master
       if( selectMode = 1 && blink ) {
         pixelColorBlue = 0
       } else {
         pixelColorBlue = 255;
       }
+=======
+      pixelColorBlue = (i + 1) * (255 / (secondval + 1));
+      //pixelColorBlue = 255;
+>>>>>>> parent of 436b84e... disable fade and add blink logic
     }
     else {
       pixelColorBlue = 0;
     }
 
     if (deadBand( i, minuteval, 0.9 )) {
+<<<<<<< HEAD
       pixelColorGreen = 255;
+=======
+      pixelColorGreen = (i + 1) * (255 / (minuteval + 1));
+      //pixelColorGreen = 255;
+>>>>>>> parent of 436b84e... disable fade and add blink logic
     }
     else {
       pixelColorGreen = 0;
     }
 
     if (deadBand( i, hourval, 2.5 )) {
+<<<<<<< HEAD
       pixelColorRed = 255;
+=======
+      pixelColorRed = (i + 1) * (255 / (hourval + 1));
+      //pixelColorRed = 255;
+>>>>>>> parent of 436b84e... disable fade and add blink logic
     }
     else {
       pixelColorRed = 0;
@@ -207,10 +233,16 @@ void loop () {
 
   // wait
   delay(100);
+<<<<<<< HEAD
   blink = ! blink;
   if( button1.togglePush() ) {
     selectMode = cycleMode( selectMode );
   }
+<<<<<<< HEAD
+=======
+>>>>>>> parent of 436b84e... disable fade and add blink logic
+
+=======
   if( button2.togglePush() ) {
      if( selectMode == 1 ) {
         hourval   = Clock.hour() + 1;
@@ -225,6 +257,7 @@ void loop () {
      if (hourval > 11) hourval -= 12;           // This clock is 12 hour, if 13-23, convert to 0-11
      hourval = (hourval * 60 + minuteval) / 12; //each red dot represent 24 minutes.
   }
+>>>>>>> origin/master
 }
 
 // Select setup mode
