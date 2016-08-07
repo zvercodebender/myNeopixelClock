@@ -39,6 +39,8 @@ class Button {
     Button( int myPin = 2 ) {
       pin = myPin;
       pinMode( pin, INPUT_PULLUP );
+      currentVal = false;
+      lastVal = false;
     }
 
     boolean togglePush() {
@@ -80,9 +82,9 @@ class Button {
     }
 
   private:
-    int pin = 2;
-    boolean currentVal = false;
-    boolean lastVal = false;
+    int pin;
+    boolean currentVal;
+    boolean lastVal;
     
     boolean readButton() {
       lastVal = currentVal;
@@ -168,7 +170,7 @@ void loop () {
       // calculates a faded arc from low to maximum brightness
       //pixelColorBlue = (i + 1) * (255 / (secondval + 1));
       if( selectMode = 1 && blink ) {
-        pixelColorBlue = 0
+        pixelColorBlue = 0;
       } else {
         pixelColorBlue = 255;
       }
@@ -229,7 +231,7 @@ void loop () {
      if( selectMode == 3 ) {
         secondval   = Clock.second() + 1;
      }
-     rtc.adjust(DateTime( yearval, monthval, dayval, hourval, minuteval, secondval );
+     RTC.adjust(DateTime( yearval, monthval, dayval, hourval, minuteval, secondval ) );
      if (hourval > 11) hourval -= 12;           // This clock is 12 hour, if 13-23, convert to 0-11
      hourval = (hourval * 60 + minuteval) / 12; //each red dot represent 24 minutes.
   }
