@@ -38,7 +38,7 @@ class Button {
   public:
     Button( int myPin = 2 ) {
       pin = myPin;
-      pinMode( pin, INPUT_PULLUP );
+      pinMode( pin, INPUT );
       currentVal = false;
       lastVal = false;
     }
