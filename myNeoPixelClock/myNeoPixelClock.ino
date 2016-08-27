@@ -1,17 +1,8 @@
 /**************************************************************************
- *                                                                     	*
- *   NeoPixel Ring Clock                                               	*
- *   by Andy Doro (mail@andydoro.com)                                 	*
- *   http://andydoro.com/ringclock/                                   	*
- *                                                                      *
+ *                                                                        *
+ *   NeoPixel Ring Clock                                                  *
+ *                                                                        *
  **************************************************************************
- *
- *
- * Revision History
- *
- * Date 	 By    What
- * 20140320 	AFD 	First draft
- * 20160105   AFD   faded arcs
  */
 
 // include the library code:
@@ -38,7 +29,7 @@ class Button {
   public:
     Button( int myPin = 2 ) {
       pin = myPin;
-      pinMode( pin, INPUT_PULLUP );
+      pinMode( pin, INPUT );
       currentVal = false;
       lastVal = false;
     }
